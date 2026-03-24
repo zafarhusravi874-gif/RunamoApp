@@ -1,5 +1,7 @@
 name: Build Runamo APK
 on: [push, workflow_dispatch]
+name: Build Runamo APK
+on: [push, workflow_dispatch]
 
 jobs:
   build:
@@ -7,6 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # 1. Сохтани коди барнома (main.py)
       - name: Create main.py
         run: |
           cat <<EOF > main.py
@@ -19,6 +22,7 @@ jobs:
               RunamoApp().run()
           EOF
 
+      # 2. Сохтани танзимоти Buildozer
       - name: Create buildozer.spec
         run: |
           cat <<EOF > buildozer.spec
@@ -38,16 +42,19 @@ jobs:
           android.archs = arm64-v8a
           EOF
 
+      # 3. Сохтани APK
       - name: Build with Buildozer
         uses: ArtemSerebrennikov/buildozer-action@v1
         with:
           buildozer_version: latest
 
+      # 4. Гирифтани файли APK
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: Runamo-APK-File
           path: bin/*.apk
+          
           
           
 
